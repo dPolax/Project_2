@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Flask App{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="{{ url_for('main.index') }}">
+                        Flask App
+                    </a>
+                </div>
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li><a href="{{ url_for('main.index') }}">Главная</a></li>
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.is_admin %}
+                                <li><a href="{{ url_for('admin.index') }}">Админ-панель</a></li>
+                            {% endif %}
+                            <li><a href="{{ url_for('auth.logout') }}">Выйти</a></li>
+                        {% else %}
+                            <li><a href="#" id="login-button">Войти</a></li>
+                            <li><a href="#" id="register-button">Регистрация</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; {{ now.year }} Flask App</p>
+        </div>
+    </footer>
+
+    <!-- Модальные окна для входа и регистрации -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="login-form-container">
+                {% include 'auth/login_modal.html' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="register-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="register-form-container">
+                {% include 'auth/register_modal.html' %}
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/auth-modal.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

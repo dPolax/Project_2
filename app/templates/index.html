@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Главная - Flask App{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1>Добро пожаловать на Flask App</h1>
+    
+    {% if current_user.is_authenticated %}
+        <p>Привет, {{ current_user.username }}!</p>
+    {% else %}
+        <p>Это шаблон сайта на Flask с админкой и модальными окнами для входа/регистрации.</p>
+        <div class="button-group">
+            <button class="btn btn-primary" id="home-login-button">Войти</button>
+            <button class="btn btn-secondary" id="home-register-button">Регистрация</button>
+        </div>
+    {% endif %}
+</div>
+
+<div class="features-section">
+    <div class="row">
+        <div class="column">
+            <div class="feature-card">
+                <h3>Flask-Admin</h3>
+                <p>Административная панель для управления данными</p>
+            </div>
+        </div>
+        <div class="column">
+            <div class="feature-card">
+                <h3>Flask-Login</h3>
+                <p>Управление аутентификацией пользователей</p>
+            </div>
+        </div>
+        <div class="column">
+            <div class="feature-card">
+                <h3>Blueprints</h3>
+                <p>Модульная структура приложения</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Привязка кнопок на главной странице к модальным окнам
+    document.getElementById('home-login-button').addEventListener('click', function() {
+        document.getElementById('login-modal').style.display = 'block';
+    });
+    
+    document.getElementById('home-register-button').addEventListener('click', function() {
+        document.getElementById('register-modal').style.display = 'block';
+    });
+</script>
+{% endblock %}
